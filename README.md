@@ -4,37 +4,37 @@
 
 This project studies how technologies become dominant in the presence of **network effects and uncertainty**, using the classic QWERTY vs DSK keyboard competition as a model system.
 
-The core question is:
+The central question is:
 
-> *How much adoption is required for an inferior technology to become self-sustaining?*
+> *At what point does a technology become self-sustaining despite being intrinsically inferior?*
 
-We model this as a **stochastic dynamical system** with multiple equilibria and identify the tipping point where dominance shifts.
+We model this as a **nonlinear stochastic dynamical system**, where adoption evolves through feedback and random fluctuations.
 
 ---
 
 ## Key Insight
 
-In systems with network effects:
+In systems with strong network effects:
 
-- Adoption reinforces further adoption  
-- But intrinsic quality differences create opposing pressure  
+- Adoption reinforces further adoption (positive feedback)  
+- Intrinsic quality differences create opposing pressure (negative feedback)  
 
 This leads to:
 
 > **Bistability** — two competing stable equilibria
 
-- Low adoption → DSK dominates (technically superior)  
-- High adoption → QWERTY dominates (network advantage)  
+- Low adoption → DSK dominates (technical superiority)  
+- High adoption → QWERTY dominates (network effects)  
 
-The transition between them occurs at a **tipping point (~72%)**, where the system becomes highly sensitive to fluctuations.
+Between them lies a **tipping point**, where outcomes become highly sensitive to small fluctuations.
 
 ---
 
 ## Model
 
-### Adoption Probability (Logit Choice)
+### Adoption Probability (Logit Choice Model)
 
-We model user choice using a discrete choice framework:
+We model the probability of choosing QWERTY as:
 
 P(x) = 1 / (1 + exp[-(β(2x - 1) - ΔQ)])
 
@@ -46,100 +46,112 @@ where:
 
 ---
 
+### Calibration
+
+We impose a single anchor condition:
+
+P(0.70) = 0.50  
+
+This implies:
+
+ΔQ = 0.4 β  
+
+This ensures that at 70% adoption, network advantage and technical superiority exactly balance.
+
+> The tipping point is **not imposed** — it emerges from the model.
+
+---
+
 ### Dynamics
 
-The evolution of adoption is governed by:
+The deterministic evolution is:
 
-dx/dt = P(x) - x
+dx/dt = P(x) - x  
 
-This captures:
-
-- positive feedback (network effects)  
-- negative feedback (technical superiority)
+- P(x) > x → growth (QWERTY expands)  
+- P(x) < x → decay (DSK recovers)  
 
 ---
 
 ### Stochastic Extension
 
-To model real-world uncertainty:
+To incorporate uncertainty:
 
-dx = (P(x) - x) dt + σ dWₜ
+dx = (P(x) - x) dt + σ √(x(1 - x)) dWₜ  
 
-where:
-
-- σ: noise level  
+- σ: noise strength  
 - dWₜ: Brownian motion  
+
+This introduces randomness in adoption decisions.
 
 ---
 
 ## Results
 
-### 1. Multiple Equilibria
+### 1. Emergent Tipping Point
 
-The system exhibits:
+The tipping point x* is obtained by solving:
 
-- Two **stable equilibria** (~0 and ~1)  
-- One **unstable equilibrium** (~0.72) → tipping point  
+P(x*) = x*  
+
+It appears as an **unstable equilibrium**, where:
+
+P′(x*) > 1  
+
+This is the **separatrix** between two regimes.
 
 ---
 
-### 2. Stochastic Trajectories
+### 2. Phase Space Behavior
+
+- Below x*: system drifts toward DSK (restoring force)  
+- Above x*: system moves toward QWERTY (positive feedback)  
+
+---
+
+### 3. Stochastic Dynamics
 
 Near the tipping point:
 
 - Small fluctuations determine outcome  
-- Trajectories diverge toward different equilibria  
+- Trajectories diverge into different equilibria  
 
 This demonstrates:
 
-> **Sensitivity to initial conditions and noise**
-
----
-
-### 3. Probability of Dominance
-
-We compute:
-
-P(QWERTY dominance | initial share x₀)
-
-Result:
-
-- S-shaped transition curve  
-- Sharp change around ~72%  
-
-Interpretation:
-
-> The tipping point is not deterministic — it defines a **probabilistic transition region**
+> **Noise-driven selection between competing technologies**
 
 ---
 
 ## Interpretation
 
-The tipping point acts as a **separatrix** between two basins of attraction:
+The tipping point is not a fixed deterministic boundary, but a **region of maximum sensitivity**:
 
-- Below it → system returns to DSK  
-- Above it → system converges to QWERTY  
+- Below it → system reverts  
+- Above it → system locks in  
+- Near it → outcomes are probabilistic  
 
-Under stochastic dynamics:
+This is analogous to:
 
-> The tipping point represents the region of **maximum uncertainty**, where outcomes become probabilistic.
+- phase transitions  
+- metastability  
+- barrier crossing in stochastic systems  
 
 ---
 
 ## Code Structure
 
-- `model.py`  
-  Defines adoption function and stochastic dynamics  
-
-- `analysis.py`  
-  Generates:
-  - adoption curves  
-  - stochastic trajectories  
-  - probability transition plot  
+- `qwerty_model.py`  
+  Contains:
+  - adoption function  
+  - equilibrium computation  
+  - stochastic simulation  
+  - plotting (phase space + trajectories)
 
 ---
 
-## How to Run
 
-```bash
-python analysis.py
+# <img width="1489" height="590" alt="image" src="https://github.com/user-attachments/assets/c909be0c-cbe3-4e67-be8e-02a6bc27e7c9" />
+
+---
+
+
