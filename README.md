@@ -140,7 +140,7 @@ This is analogous to:
 
 ## Code Structure
 
-- `qwerty_model.py`  
+- `model.py`  
   Contains:
   - adoption function  
   - equilibrium computation  
